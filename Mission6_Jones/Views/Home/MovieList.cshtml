@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@* @model Movie (Then you can do @Model.Attribute) *@
+@model List<Mission6_Jones.Models.Movie> // This page accepts a list of the 'Movie' model
+
+<h1 class="text-center">Movie List</h1>
+
+	@* -- Some css for the table -- *@
+<table class="table table-bordered table-striped table-hover table-bordered">
+	<thead class="fw-bold">
+		<tr>
+			<th>Title</th>
+			<th>Category</th>
+			<th>Year</th>
+			<th>Director</th>
+			<th>Rating</th>
+			<th>Edited</th>
+			<th>Lent To</th>
+			<th>Copied To Plex</th>
+			<th>Notes</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		@foreach (var movie in Model)
+		{
+			<tr>
+				<td>@movie.Title</td>
+				<td>@(movie.Category?.CategoryName ?? "No Category")</td>
+				<td>@movie.Year</td>
+				<td>@movie.Director</td>
+				<td>@movie.Rating</td>
+				<td>@movie.Edited</td>
+				<td>@movie.LentTo</td>
+				<td>@movie.CopiedToPlex</td>
+				<td>@movie.Notes</td>
+
+				@* asp-route-blah lets us identify the specific record by making that info part of the route *@
+				<td><a class="btn btn-info btn-sm" asp-controller="Home" asp-action="Edit" asp-route-id="@movie.MovieId">Edit</a></td>
+				<td><a class="btn btn-danger btn-sm" asp-controller="Home" asp-action="Delete" asp-route-id="@movie.MovieId">Delete</a></td>
+			</tr>
+		}
+</table>

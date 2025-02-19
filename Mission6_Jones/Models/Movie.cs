@@ -1,35 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mission6_Jones.Models
 {
     public class Movie
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }  // Primary Key
+        public int MovieId { get; set; }
+
+        [ForeignKey("Category")]
+        public int? CategoryId { get; set; }  // Nullable because DB allows NULL
+        public Category? Category { get; set; } // Navigation Property
 
         [Required]
-        public string Category { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Required]
-        public string Title { get; set; }
-
-        [Required]
-        [Range(1900, 2100)]
+        [Range(1888, 2025, ErrorMessage = "Year must be between 1888 and the current year.")]
         public int Year { get; set; }
+        public string? Director { get; set; }  // Change to nullable
+        public string? Rating { get; set; }  // Change to nullable
 
         [Required]
-        public string Director { get; set; }
-
+        public bool Edited { get; set; } = false;
+        public string? LentTo { get; set; }
         [Required]
-        public string Rating { get; set; }
+        public bool CopiedToPlex { get; set; } = false;
 
-        public bool Edited { get; set; }  // Optional, defaults to false
-
-        public string? LentTo { get; set; }  // Optional
-
-        [StringLength(25)]
-        public string? AdditionalNotes { get; set; }  // Optional, max 25 chars
+        [StringLength(25, ErrorMessage = "Notes must be 25 characters or fewer.")]
+        public string? Notes { get; set; }
     }
 }
-

@@ -7,26 +7,37 @@
 <h1>Add a Movie to the Database</h1>
 
 <form method="post">
-    <div>
-        <label asp-for="Category">Category</label>
-        <input type="text" asp-for="Category" class="form-control" required />
-    </div>
 
+    <input type="hidden" asp-for="MovieId" />
+
+    <br />
+
+    <div>
+        <label asp-for="CategoryId">Category</label>
+        <select asp-for="CategoryId">
+            <option value="">Select a Category</option>
+			@foreach (Category category in ViewBag.Categories)
+			{
+				<option value="@category.CategoryId">@category.CategoryName</option>
+			}
+        </select>
+    </div>
+    <br />
     <div>
         <label asp-for="Title">Title</label>
         <input type="text" asp-for="Title" class="form-control" required />
     </div>
-
+    <br />
     <div>
         <label asp-for="Year">Year</label>
-        <input type="number" asp-for="Year" class="form-control" required />
+        <input type="number" asp-for="Year" min="1888" class="form-control" required />
     </div>
-
+    <br />
     <div>
         <label asp-for="Director">Director</label>
         <input type="text" asp-for="Director" class="form-control" required />
     </div>
-
+    <br />
     <div>
         <label asp-for="Rating">Rating</label>
         <select asp-for="Rating" class="form-control" required>
@@ -37,20 +48,25 @@
             <option value="R">R</option>
         </select>
     </div>
-
+    <br />
     <div>
         <label asp-for="Edited">Edited</label>
         <input type="checkbox" asp-for="Edited" class="form-check-input" />
     </div>
-
+    <br />
+    <div>
+        <label asp-for="CopiedToPlex">Copied to Plex?</label>
+        <input type="checkbox" asp-for="CopiedToPlex" class="form-check-input" />
+    </div>
+    <br />
     <div>
         <label asp-for="LentTo">Lent To</label>
         <input type="text" asp-for="LentTo" class="form-control" />
     </div>
-
+    <br />
     <div>
-        <label asp-for="AdditionalNotes">Additional Notes</label>
-        <input type="text" asp-for="AdditionalNotes" class="form-control" maxlength="25" />
+        <label asp-for="Notes">Additional Notes</label>
+        <input type="text" asp-for="Notes" class="form-control" maxlength="25" />
     </div>
 
     <br />

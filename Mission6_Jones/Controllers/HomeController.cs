@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mission6_Jones.Models;
 using SQLitePCL;
 
@@ -31,6 +32,7 @@ namespace Mission6_Jones.Controllers
         [HttpGet]
         public IActionResult AddMovie()
         {
+            ViewBag.Categories = _context.Categories.OrderBy(x => x.CategoryName).ToList();
             return View();
         }
 
@@ -47,5 +49,53 @@ namespace Mission6_Jones.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult MovieList()
+        {
+            var movies = _context.Movies
+                                 .Include(x => x.Category)
+                                 .Where(m => m.Title != null && m.Title != string.Empty)
+                                 .ToList();
+            return View(movies);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var recordToEdit = _context.Movies.Single(x => x.MovieId == id); // This passes the specific record to the view
+            // ViewBag is a way to send data from the controller to the view, especially if it isn't part of the given model
+            ViewBag.Categories = _context.Categories.OrderBy(x => x.CategoryName).ToList(); // We have to make sure to send over the categories as well!
+            return View("AddMovie", recordToEdit);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Movie response)
+        {
+            _context.Update(response);
+            _context.SaveChanges();
+            return RedirectToAction("MovieList");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var recordToDelete = _context.Movies.Single(x => x.MovieId == id); // Passes specific record to delete
+            return View(recordToDelete);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Movie response, int id)
+        {
+            var movie = _context.Movies.Find(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            _context.Movies.Remove(movie);
+            _context.SaveChanges();
+            return RedirectToAction("MovieList");
+        }
+
     }
 }
