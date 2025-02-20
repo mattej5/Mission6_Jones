@@ -32,16 +32,24 @@ namespace Mission6_Jones.Controllers
         [HttpGet]
         public IActionResult AddMovie()
         {
-            ViewBag.Categories = _context.Categories.OrderBy(x => x.CategoryName).ToList();
-            return View();
+            ViewBag.Categories = _context.Categories.OrderBy(x => x.CategoryName).ToList(); // Provide options for the dropdown
+            return View(new Movie());
         }
 
         [HttpPost]
         public IActionResult AddMovie(Movie response)
         {
-            _context.Movies.Add(response);
-            _context.SaveChanges();
-            return View("Confirmation");
+            if (ModelState.IsValid)
+            {
+                _context.Movies.Add(response);
+                _context.SaveChanges();
+                return View("Confirmation");
+            }
+            else // Invalid data
+            {
+                ViewBag.Categories = _context.Categories.OrderBy(x => x.CategoryName).ToList(); // Return ViewBag if data is invalid
+                return View(response);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
